@@ -51,6 +51,7 @@ from openlibrary.utils import dateutil
 from openlibrary.utils.isbn import canonical, isbn_10_to_isbn_13, isbn_13_to_isbn_10
 
 from openlibrary.core.recommendation_engine import get_recommendations
+from infogami.utils.view import render_template
 
 delegate.app.add_processor(processors.ReadableUrlProcessor())
 delegate.app.add_processor(processors.ProfileProcessor())
@@ -1436,7 +1437,4 @@ class recommendations(delegate.page):
     path = '/recommendations'
 
     def GET(self):
-        # For now, use a dummy user ID
-        user_id = "dummy_user"
-        recs = get_recommendations(user_id)
-        return "Your recommendations: " + ", ".join(recs)
+        return "Test recommendations page"
