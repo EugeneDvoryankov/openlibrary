@@ -50,6 +50,8 @@ from openlibrary.plugins.worksearch.code import do_search
 from openlibrary.utils import dateutil
 from openlibrary.utils.isbn import canonical, isbn_10_to_isbn_13, isbn_13_to_isbn_10
 
+from openlibrary.core.recommendation_engine import get_recommendations
+
 delegate.app.add_processor(processors.ReadableUrlProcessor())
 delegate.app.add_processor(processors.ProfileProcessor())
 delegate.app.add_processor(processors.CORSProcessor(cors_prefixes={'/api/'}))
@@ -1429,3 +1431,12 @@ def setup():
 
 
 setup()
+
+class recommendations(delegate.page):
+    path = '/recommendations'
+
+    def GET(self):
+        # For now, use a dummy user ID
+        user_id = "dummy_user"
+        recs = get_recommendations(user_id)
+        return "Your recommendations: " + ", ".join(recs)
