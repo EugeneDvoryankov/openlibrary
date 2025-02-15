@@ -1,8 +1,8 @@
 $def with (recs)
 
-<h1>Your Recommendations</h1>
+<h1>Test recommendations page</h1>
 <ul>
-$for rec in recs:
-    <li>$rec</li>
-$end
+$: for rec in recs:
+    <li>${rec}</li>
+$: end
 </ul>

@@ -1438,4 +1438,7 @@ class recommendations(delegate.page):
     path = '/recommendations'
 
     def GET(self):
-        return "Test recommendations page"
+        # Use the default username
+        user_id = "openlibrary"
+        recs = get_recommendations(user_id)
+        return render_template("recommendations/index", recs=recs)
