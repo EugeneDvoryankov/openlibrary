@@ -26,6 +26,8 @@ from openlibrary.i18n import gettext as _
 from openlibrary.utils import extract_numeric_id_from_olid
 from openlibrary.utils.dateutil import current_year
 
+import openlibrary.core.recommendation_engine
+
 if TYPE_CHECKING:
     from openlibrary.core.lists.model import List
     from openlibrary.plugins.upstream.models import Work
@@ -552,6 +554,21 @@ class ReadingLog:
         )
 
         return logged_books
+    
+    def get_recommendations(self, limit: int = 7) -> list[str]:
+        """
+        Get recommended books for the user.
+        This meethod uses the recommendation engine to compute recommendations based on the user's reading history.
+        """
+        username = self.user.get_username() if self.user else None
+        if not username:
+            return[]
+        
+        # Get recommendations from recommendation engine function
+        recs = openlibrary.core.recommendation_engine.get_recommendations(username)
+        
+        # Make sure the user can get at most 7 recommendations
+        return [str(rec) for rec in recs][:limit]
 
 
 @public
