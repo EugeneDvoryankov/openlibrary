@@ -1,8 +1,364 @@
 $def with (recs)
 
-<h1>Test recommendations page</h1>
-<ul>
-$: for rec in recs:
-    <li>${rec}</li>
-$: end
-</ul>
+<div class="mybooks">
+
+<dialog id="yearly-goal-modal" class="native-dialog">
+    <div class="floaterHead">
+      <h2>Yearly Reading Goal</h2>
+      <a class="native-dialog--close" href="javascript:;">×<span class="shift">Close</span></a>
+    </div>
+    
+  <form class="goal-form" action="/reading-goal.json" method="POST">
+    <input type="hidden" name="year" value="2025">
+    <span>How many books would you like to read this year?</span>
+    <input type="number" name="goal" min="1" step="1" value="" max="10000" required="">
+    <button class="cta-btn cta-btn--shell reading-goal-submit-button" type="submit" data-ol-link-track="YearlyReadingGoals|SubmitGoal">Submit</button>
+    <a class="small" href="https://blog.openlibrary.org/2022/12/31/reach-your-2023-reading-goals-with-open-library" target="_blank">Learn More</a>
+  </form>
+  
+  </dialog>
+  
+    
+    <div class="mybooks-menu">
+      <ul class="sidebar-section">
+        <li class="section-header">openlibrary</li>
+        <li>
+          <a class="li-title-desktop" href="/account/loans" data-ol-link-track="MyBooksSidebar|Loans">My Loans</a>
+        </li>
+        <li>
+          <a class="li-title-desktop" data-ol-link-track="MyBooksSidebar|LoanHistory" href="/account/loan-history">Loan History</a>
+        </li>
+        <li><a data-ol-link-track="MyBooksSidebar|MyFeed" href="/people/openlibrary/books/feed">My Feed</a></li>
+      </ul>
+      
+      <ul class="sidebar-section">
+        <li class="section-header">2025 Reading Goal</li>
+        <li>
+          <div class="yearly-goal-section">
+            <div class="chip-group ">
+              <span class="">
+                <a class="set-reading-goal-link" data-ol-link-track="MyBooksLandingPage|SetReadingGoal" href="javascript:;">Set   <span>2025</span>
+   reading goal</a>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+      
+      <ul class="sidebar-section">
+        <li class="section-header">Reading Log</li>
+        <li>
+          <a class="li-title-desktop" href="/people/openlibrary/books/currently-reading" data-ol-link-track="MyBooksSidebar|CurrentlyReading"><span class="li-count">0</span>Currently Reading</a>
+        </li>
+        <li>
+          <a class="li-title-desktop" href="/people/openlibrary/books/want-to-read" data-ol-link-track="MyBooksSidebar|WantToRead"><span class="li-count">2</span>Want to Read</a>
+        </li>
+        <li>
+          <a class="li-title-desktop" href="/people/openlibrary/books/already-read" data-ol-link-track="MyBooksSidebar|AlreadyRead"><span class="li-count">0</span>Already Read</a>
+        </li>
+      <hr>
+      <li><a data-ol-link-track="MyBooksSidebar|MyNotes" href="/people/openlibrary/books/notes"><span class="li-count">0</span>My Notes</a></li>
+      <li><a data-ol-link-track="MyBooksSidebar|MyReviews" href="/people/openlibrary/books/observations"><span class="li-count">0</span>My Reviews</a></li>
+      <hr>
+      <li><a data-ol-link-track="MyBooksSidebar|ReadingStats" href="/account/books/already-read/stats">My Reading Stats</a></li>
+      <li><a data-ol-link-track="MyBooksSidebar|ImportExport" href="/account/import">Import &amp; Export Options</a></li>
+      </ul>
+      <ul class="sidebar-section">
+        <li class="section-header section-header-split"><span>My lists</span> <a href="/people/openlibrary/lists" data-ol-link-track="MyBooksSidebar|AllLists" class="li-count chevron">See All</a></li>
+        <li class="create-new-list">
+          <a href="/people/openlibrary/lists/add">Create a list</a>
+        </li>
+        
+        <div class="list-overflow">
+        </div>
+      </ul>
+    </div>
+  
+    
+    <div class="mybooks-details ">
+    
+      <header>
+        <div class="breadcrumb-wrapper">
+          
+          <div class="account-breadcrumb">
+            <a href="/people/openlibrary" class="username-avatar"><img src="/people/openlibrary/avatar" class="account-avatar"></a>
+            <h2 class="account-username"><a href="/people/openlibrary">openlibrary</a> ›</h2>
+          </div>
+          <div class="sansserif grey account-settings-menu navigation-breadcrumbs">
+            
+      <span class="crumb">
+          <span class="crumbicon">
+              <div class="dropdown">
+                  <h2 class="breadcrumb-title">Recommendations</h2>
+                  <img class="icon-link__image down-chevron" src="/static/images/icons/right-chevron.svg">
+              </div>
+              <select class="disguised-select">
+                  <option value="/people/openlibrary/books">Books</option>
+                  <option value="/people/openlibrary/books/want-to-read/">Want to Read (2)</option>
+                  <option value="/people/openlibrary/books/currently-reading/">Currently Reading (0)</option>
+                  <option value="/people/openlibrary/books/already-read/">Already Read (0)</option>
+                  <option value="/people/openlibrary/books/feed/">My Feed</option>
+                  <option value="/people/openlibrary/lists">Lists (0)</option>
+                  <option value="/people/openlibrary/followers">Followers</option>
+                  <option value="/people/openlibrary/following">Following</option>
+                  <option selected="">Loans</option>
+                  <option value="/account/loan-history">Loan History</option>
+                  <option value="/people/openlibrary/books/notes">Notes</option>
+                  <option value="/people/openlibrary/books/observations">Reviews</option>
+                  <option value="/account/import">Imports and Exports</option>
+              </select>
+          </span>
+      </span>
+  
+  
+  
+          </div>
+        </div>
+    
+        <div class="social-wrapper">
+          <a class="cta-btn cta-btn--unstyled" href="/people/openlibrary/following"><strong>0</strong> Following</a>
+          <a class="cta-btn cta-btn--unstyled" href="/people/openlibrary/followers"><strong>0</strong> Followers</a>
+        </div>
+      </header>
+    
+      <div class="details-content">
+        
+  
+  <div class="chip-group">
+    
+  </div>
+  
+  
+  
+        
+        
+  <style type="text/css">
+  .date, .waitrank {
+      margin: 5px 0px;
+  }
+  .dialog .title {
+      font-weight: bold;
+  }
+  
+  tr.expired {
+      background: #ffcdcd;
+  }
+  
+  td.status, th.status {
+      padding: 15px;
+      text-align: center;
+  }
+  
+  tr.row-available .status-value {
+      color: darkgreen;
+  }
+  
+  tr.row-available {
+      background: #fffdcd;
+  }
+  
+  td.actions form + form {
+      margin-top: 5px;
+  }
+  
+  th.action {
+      width: 150px;
+  }
+  th.status {
+      width: 150px;
+  }
+  .loan-history {
+    margin-top: 1em;
+  }
+  
+  .details-content>header{
+      padding-left: 0px;
+  }
+  
+  </style>
+  
+  <div>
+    <div><em>You've not checked out any books at this moment.</em></div>
+    <br>
+  </div>
+  
+  <hr>
+  
+  <header>
+      <h1 class="details-title">Books You're Waiting For</h1>
+  </header>
+  
+  <div>
+  
+      <div><em>You are not waiting for any books at this moment.</em></div>
+  </div>
+  
+  <br>
+  <hr>
+  <br>
+  
+  <div>Looking for a book to borrow?  Check out our staff picks, or search for a book on a specific subject:</div>
+       
+  
+  
+  
+  
+  <input type="hidden" name="carousel-i18n-strings" value="{&quot;open&quot;: &quot;Read&quot;, &quot;borrow_available&quot;: &quot;Borrow&quot;, &quot;borrow_unavailable&quot;: &quot;Join Waitlist&quot;, &quot;error&quot;: &quot;Not in Library&quot;, &quot;loading&quot;: &quot;Loading...&quot;}">
+  
+  
+  
+  
+  
+  
+      
+  <div class="carousel-section">
+    <div class="carousel-section-header">
+      <h2 class="home-h2"><a href="/subjects">Browse by Subject</a></h2>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel carousel--progressively-enhanced slick-initialized slick-slider" data-config="{&quot;carouselKey&quot;: &quot;categories&quot;, &quot;booksPerBreakpoint&quot;: [6, 5, 4, 3, 2, 2]}"><button type="button" data-role="none" class="slick-prev slick-arrow slick-disabled" aria-label="Previous" role="button" aria-disabled="true" style="">Previous</button>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      <div aria-live="polite" class="slick-list draggable"><div class="slick-track" style="opacity: 1; width: 2070px; transform: translate3d(0px, 0px, 0px);" role="listbox"><div class="category-item carousel__item slick-slide slick-current slick-active" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide00" id="slick-slide00" data-slick-index="0" aria-hidden="false">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/art#sort=date_published&amp;ebooks=true" tabindex="0">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/art.svg" width="30" height="30" loading="lazy" alt="browse Art books">
+            </div>
+            <p class="category-title">Art</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide slick-active" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide01" id="slick-slide01" data-slick-index="1" aria-hidden="false">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/science_fiction#sort=date_published&amp;ebooks=true" tabindex="0">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/science_fiction.svg" width="30" height="30" loading="lazy" alt="browse Science Fiction books">
+            </div>
+            <p class="category-title">Science Fiction</p>
+            <p class="category-count">1 Book</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide slick-active" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide02" id="slick-slide02" data-slick-index="2" aria-hidden="false">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/fantasy#sort=date_published&amp;ebooks=true" tabindex="0">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/fantasy.svg" width="30" height="30" loading="lazy" alt="browse Fantasy books">
+            </div>
+            <p class="category-title">Fantasy</p>
+            <p class="category-count">4 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide slick-active" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide03" id="slick-slide03" data-slick-index="3" aria-hidden="false">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/biographies#sort=date_published&amp;ebooks=true" tabindex="0">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/biographies.svg" width="30" height="30" loading="lazy" alt="browse Biographies books">
+            </div>
+            <p class="category-title">Biographies</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide04" id="slick-slide04" data-slick-index="4" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/recipes#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/recipes.svg" width="30" height="30" loading="lazy" alt="browse Recipes books">
+            </div>
+            <p class="category-title">Recipes</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide05" id="slick-slide05" data-slick-index="5" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/romance#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/romance.svg" width="30" height="30" loading="lazy" alt="browse Romance books">
+            </div>
+            <p class="category-title">Romance</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide06" id="slick-slide06" data-slick-index="6" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/textbooks#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/textbooks.svg" width="30" height="30" loading="lazy" alt="browse Textbooks books">
+            </div>
+            <p class="category-title">Textbooks</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide07" id="slick-slide07" data-slick-index="7" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/children#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/children.svg" width="30" height="30" loading="lazy" alt="browse Children books">
+            </div>
+            <p class="category-title">Children</p>
+            <p class="category-count">1 Book</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide08" id="slick-slide08" data-slick-index="8" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/history#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/history.svg" width="30" height="30" loading="lazy" alt="browse History books">
+            </div>
+            <p class="category-title">History</p>
+            <p class="category-count">3 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide09" id="slick-slide09" data-slick-index="9" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/medicine#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/medicine.svg" width="30" height="30" loading="lazy" alt="browse Medicine books">
+            </div>
+            <p class="category-title">Medicine</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide010" id="slick-slide010" data-slick-index="10" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/religion#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/religion.svg" width="30" height="30" loading="lazy" alt="browse Religion books">
+            </div>
+            <p class="category-title">Religion</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide011" id="slick-slide011" data-slick-index="11" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/mystery_and_detective_stories#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/mystery_and_detective_stories.svg" width="30" height="30" loading="lazy" alt="browse Mystery and Detective Stories books">
+            </div>
+            <p class="category-title">Mystery and Detective Stories</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide012" id="slick-slide012" data-slick-index="12" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/plays#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/plays.svg" width="30" height="30" loading="lazy" alt="browse Plays books">
+            </div>
+            <p class="category-title">Plays</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide013" id="slick-slide013" data-slick-index="13" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/music#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/music.svg" width="30" height="30" loading="lazy" alt="browse Music books">
+            </div>
+            <p class="category-title">Music</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div><div class="category-item carousel__item slick-slide" style="width: 118px;" tabindex="-1" role="option" aria-describedby="slick-slide014" id="slick-slide014" data-slick-index="14" aria-hidden="true">
+          <a class="category-nostyle" data-ol-link-track="CarouselCategories" href="/subjects/science#sort=date_published&amp;ebooks=true" tabindex="-1">
+            <div class="category-icon">
+              <img class="category-img" src="/static/images/categories/science.svg" width="30" height="30" loading="lazy" alt="browse Science books">
+            </div>
+            <p class="category-title">Science</p>
+            <p class="category-count">0 Books</p>
+          </a>
+        </div></div></div><button type="button" data-role="none" class="slick-next slick-arrow" aria-label="Next" role="button" style="" aria-disabled="false">Next</button></div>
+    </div>
+  </div>
+  
+      Or, check out our <a href="/collections">special collections</a>.
+  
+      </div>
+    </div>
+  
+</div>
