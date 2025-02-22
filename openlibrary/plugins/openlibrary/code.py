@@ -50,7 +50,7 @@ from openlibrary.plugins.worksearch.code import do_search
 from openlibrary.utils import dateutil
 from openlibrary.utils.isbn import canonical, isbn_10_to_isbn_13, isbn_13_to_isbn_10
 
-from openlibrary.core.recommendation_engine import get_recommendations
+from openlibrary.core.recommendation_engine import get_recommendations, get_empty_recommendations
 from infogami.utils.view import render_template
 
 delegate.app.add_processor(processors.ReadableUrlProcessor())
@@ -1441,4 +1441,11 @@ class recommendations(delegate.page):
         # Use the default username
         user_id = "openlibrary"
         recs = get_recommendations(user_id)
-        return render_template("recommendations/index", recs=recs)
+
+        # If there are no recommendations, show this page
+        if not bool(recs):
+            return render_template("recommendations/empty_recommendation_list", recs=recs)
+        
+        # If there are recommendations, show annother page
+        else:
+            return render_template("recommendations/non_empty_recommendation_list", recs=recs)

@@ -1,0 +1,4 @@
+I have reverse engineered a html page for recommendation. 
+Now I want to make it interactive. Given a list of recommendation books 
+from recommendation_engine.py, 
+I want to show  inside a coursel in the recommendation page.

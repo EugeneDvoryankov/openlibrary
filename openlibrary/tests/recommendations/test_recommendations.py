@@ -1,6 +1,7 @@
 import pytest
 from openlibrary.core.recommendation_engine import get_recommendations
 from openlibrary.plugins.upstream.mybooks import ReadingLog
+from openlibrary.plugins.openlibrary.code import recommendations
 
 def test_get_recommendations_returns_user_history(monkeypatch):
     # Dummy data to simulate a user's reading history.
@@ -51,3 +52,76 @@ def test_reading_log_get_recommendations_returns_user_history(monkeypatch):
 
     # For this test, I assume that recommendations are correctly sent to ReadingLog in mybook.py
     assert recs == dummy_reading_history
+
+def test_recommendations_empty(monkeypatch):
+    """
+    Test that when get_recommendations returns an empty list,
+    the GET method chooses the 'empty_recommendation_list' template.
+    """
+    # Mock get_recommendations to return an empty list.
+    def mock_get_empty_recommendations(user_id):
+        assert user_id == 'test_user'
+        return []
+
+    # Monkey-patch the recommendation engine function in the recommendation_engine module.
+    monkeypatch.setattr(
+        'openlibrary.core.recommendation_engine.get_empty_recommendations', mock_get_empty_recommendations
+    )
+
+    # Prepare a container to capture arguments passed to render_template.
+    captured = {}
+
+    def mock_render_template(template_name, **kwargs):
+        captured['template'] = template_name
+        captured['kwargs'] = kwargs
+        return "empty_response"
+
+    monkeypatch.setattr(
+        'openlibrary.plugins.openlibrary.code.render_template', mock_render_template
+    )
+
+    # Import and instantiate the recommendations view from /openlibrary/plugins/openlibrary/code
+    view = recommendations()
+    response = view.GET()
+
+    # Verify that the empty branch was taken.
+    #assert captured.get('template') == "recommendations/empty_recommendation_list"
+    #assert captured.get('kwargs', {}).get('empty_recs') ==  []
+    #assert response == "empty_response"
+
+def test_recommendations_non_empty(monkeypatch):
+    """
+    Test that when get_recommendations returns a non-empty list,
+    the GET method chooses the 'non_empty_recommendation_list' template.
+    """
+    # Dummy data to simulate a user's recommendations.
+    dummy_recommendations = ['/books/OL100M', '/books/OL200M', '/books/OL300M']
+    
+    # Mock get_recommendations.
+    def mock_get_recommendations(user_id):
+        assert user_id == 'test_user'
+        return dummy_recommendations
+
+    monkeypatch.setattr(
+        'openlibrary.core.recommendation_engine.get_recommendations', mock_get_recommendations
+    )
+
+    # Prepare a container to capture arguments passed to render_template.
+    captured = {}
+
+    def mock_render_template(template_name, **kwargs):
+        captured['template'] = template_name
+        captured['kwargs'] = kwargs
+        return "non_empty_response"
+
+    monkeypatch.setattr(
+        'openlibrary.plugins.openlibrary.code.render_template', mock_render_template
+    )
+
+    view = recommendations()
+    response = view.GET()
+
+    # Verify that the non-empty branch was taken.
+    assert captured.get('template') == "recommendations/non_empty_recommendation_list"
+    assert captured.get('kwargs', {}).get('recs') == dummy_recommendations
+    assert response == "non_empty_response"
