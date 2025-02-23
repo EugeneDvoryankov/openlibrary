@@ -1,0 +1,74 @@
+$def with (user, recs, mb)
+
+<style type="text/css">
+    .date, .waitrank {
+        margin: 5px 0px;
+    }
+    .dialog .title {
+        font-weight: bold;
+    }
+    
+    tr.expired {
+        background: #ffcdcd;
+    }
+    
+    td.status, th.status {
+        padding: 15px;
+        text-align: center;
+    }
+    
+    tr.row-available .status-value {
+        color: darkgreen;
+    }
+    
+    tr.row-available {
+        background: #fffdcd;
+    }
+    
+    td.actions form + form {
+        margin-top: 5px;
+    }
+    
+    th.action {
+        width: 150px;
+    }
+    th.status {
+        width: 150px;
+    }
+    .loan-history {
+      margin-top: 1em;
+    }
+    
+    .details-content>header{
+        padding-left: 0px;
+    }
+    
+    </style>
+
+
+<div class="mybooks">
+    $:mb.render_sidebar()
+    <div id="contentBody">
+        $:render_template("account/topmenu", mb)
+
+        $if len(recs) == 0:
+            <div>"You've not checked out any books at this moment."</div>
+        
+        $else:
+        <div class ="borrow-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="titles" colspan="2">
+                        $ungettext("%(count)d Current Loan", "%(count)d Current Recommendations", len(recs), count=len(recs))
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                $for rec in recs:
+                    <h2>A book</h2>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

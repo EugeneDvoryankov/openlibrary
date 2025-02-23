@@ -21,6 +21,7 @@ from openlibrary.core.batch_imports import (
     batch_import,
 )
 from openlibrary.i18n import gettext as _
+from openlibrary.plugins.upstream.mybooks import MyBooksTemplate
 from openlibrary.plugins.upstream.utils import setup_requests
 
 # make sure infogami.config.features is set
@@ -1441,6 +1442,7 @@ class recommendations(delegate.page):
         # Use the default username
         user_id = "openlibrary"
         recs = get_recommendations(user_id)
+        mb = MyBooksTemplate(user_id, key='mybooks')
 
         # If there are no recommendations, show this page
         if not bool(recs):
@@ -1448,4 +1450,8 @@ class recommendations(delegate.page):
         
         # If there are recommendations, show annother page
         else:
-            return render_template("recommendations/non_empty_recommendation_list", recs=recs)
+            return render_template(
+                "recommendations/clean_recommendations", 
+                user=user_id,
+                recs=recs, 
+                mb=mb)
