@@ -46,7 +46,7 @@ def get_recommendations(user_id):
     """
     Fetches recommendations for a user and retrieves book details.
     """
-    work_keys = get_user_reading_history(user_id) or []  # Ensure it's always a list
+    work_keys = get_user_reading_history(user_id) # Ensure it's always a list
     recommendations = []
 
     for key in work_keys:
@@ -55,8 +55,7 @@ def get_recommendations(user_id):
             continue  # Skip if metadata retrieval fails
 
         # Safe extraction of author name
-        author_list = work.get('authors', [])
-        author = author_list[0].get('name', 'Unknown Author') if author_list else 'Unknown Author'
+        author_keys = [a.author.key for a in work.get('authors', [])]
 
         # Safe extraction of cover
         covers = work.get('covers', [])
@@ -68,7 +67,7 @@ def get_recommendations(user_id):
         recommendations.append({
             "key": key,
             "title": work.get('title', 'Unknown Title'),
-            "author": author,
+            "author": [a.name for a in web.ctx.site.get_many(author_keys)],
             "cover": cover,
             "work_id": work_id,
         })
