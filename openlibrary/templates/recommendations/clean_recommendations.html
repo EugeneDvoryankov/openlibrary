@@ -60,13 +60,28 @@ $def with (user, recs, mb)
                 <thead>
                     <tr>
                         <th class="titles" colspan="2">
-                        $ungettext("%(count)d Current Loan", "%(count)d Current Recommendations", len(recs), count=len(recs))
+                        $ungettext("%(count)d Current Recommendation", "%(count)d Current Recommendations", len(recs), count=len(recs))
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                 $for rec in recs:
-                    <h2>A book</h2>
+        
+                <div class="reading-log-item">
+                    <div class="bookcover">
+                        $if rec['cover']:
+                            <img src="https://covers.openlibrary.org/b/id/$rec['cover']-M.jpg" alt="Cover of $rec['title']">
+                        $else:
+                            <span>No Cover</span>
+                    </div>
+                    <div class="details">
+                        <h3 class="booktitle">
+                            <a href="/works/$rec['work_id']">$rec['title']</a>
+                        </h3>
+                        <span class="bookauthor">by $rec['author']</span>
+                    </div>
+                </div>
+                
                 </tbody>
             </table>
         </div>
