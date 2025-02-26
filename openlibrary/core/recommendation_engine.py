@@ -42,7 +42,7 @@ def get_user_reading_history(user_id):
     
     return history
 
-def get_recommendations(user_id):
+def create_recommendations(user_id):
     """
     Fetches recommendations for a user and retrieves book details.
     """
@@ -63,6 +63,40 @@ def get_recommendations(user_id):
 
         # Extract work ID safely
         work_id = key.split('/')[-1] if key else "Unknown"
+
+        recommendations.append({
+            "key": key,
+            "title": work.get('title', 'Unknown Title'),
+            "author": [a.name for a in web.ctx.site.get_many(author_keys)],
+            "cover": cover,
+            "work_id": work_id,
+        })
+
+    return recommendations
+
+def get_recommendations(user_id):
+    """
+    Fetches recommendations based on the most logged books instead of only the user's reading history.
+    """
+    # Get the most logged books (popular books among all users)
+    most_logged = Bookshelves.most_logged_books(limit=10, sort_by_count=True, fetch=True)
+
+    recommendations = []
+
+    for book in most_logged:
+        work_id = book.get('work_id')
+        key = f"/works/OL{work_id}W"
+        work = web.ctx.site.get(key)
+
+        if not work:
+            continue  
+
+        # Safe extraction of author name
+        author_keys = [a.author.key for a in work.get('authors', [])]
+
+        # Safe extraction of cover
+        covers = work.get('covers', [])
+        cover = covers[0] if covers else None
 
         recommendations.append({
             "key": key,
