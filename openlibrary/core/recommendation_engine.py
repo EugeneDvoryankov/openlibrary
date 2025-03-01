@@ -1,5 +1,6 @@
 # openlibrary/core/recommendation_engine.py
 
+import requests
 import web
 from openlibrary.core.bookshelves import Bookshelves
 
@@ -42,11 +43,35 @@ def get_user_reading_history(user_id):
     
     return history
 
-def create_recommendations(user_id):
+def new_recommendations(user_id):
+    """
+    Fetches recommendations based on a predefined list of authors.
+
+    Returns a list of work keys as strings that represent recommended works.
+    """
+    author_list = ['OL22098A']  # List of author IDs
+    recommendations = []
+
+    for author_id in author_list:
+        # Fetch works by the author
+        author_works_url = f'http://localhost:8080/authors/{author_id}/works.json'
+        response = requests.get(author_works_url)
+        if response.status_code == 200:
+            works_data = response.json()
+            for work in works_data.get('entries', []):
+                work_key = work.get('key')
+                if work_key:
+                    recommendations.append(work_key)
+        else:
+            print(f"Failed to fetch works for author {author_id}")
+
+    return recommendations
+
+def get_recommendations(user_id):
     """
     Fetches recommendations for a user and retrieves book details.
     """
-    work_keys = get_user_reading_history(user_id) # Ensure it's always a list
+    work_keys = new_recommendations(user_id) # Ensure it's always a list
     recommendations = []
 
     for key in work_keys:
@@ -74,10 +99,9 @@ def create_recommendations(user_id):
 
     return recommendations
 
-def get_recommendations(user_id):
-    """
-    Fetches recommendations based on the most logged books instead of only the user's reading history.
-    """
+"""
+def get_recommendations(user_id):   
+    #Fetches recommendations based on the most logged books instead of only the user's reading history.
     # Get the most logged books (popular books among all users)
     most_logged = Bookshelves.most_logged_books(limit=10, sort_by_count=True, fetch=True)
 
@@ -107,3 +131,4 @@ def get_recommendations(user_id):
         })
 
     return recommendations
+"""
