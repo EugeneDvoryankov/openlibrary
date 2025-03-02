@@ -96,15 +96,14 @@ def get_subjects(user_id):
     Fetches the user's reading history by aggregating logged books
     from the 'Want to Read', 'Currently Reading', and 'Already Read' shelves.
     
-    Returns a list of work or book keys as strings that represent the user's reading history.
+    Returns a set of subjects that represent the user's reading history.
     """
     # Get the user object from the site
     user = web.ctx.site.get(f'/people/{user_id}')
     if not user:
-        return []
+        return set()
 
-    # The shelves that will be included in the reading history.
-    # These names  correspond to the ones in Bookshelves.PRESET_BOOKSHELVES mapping.
+    # The shelves to include in the reading history
     shelves = ['Want to Read', 'Currently Reading', 'Already Read']
     subject_keys = set()  # Using a set to avoid duplicates
 
@@ -122,35 +121,36 @@ def get_subjects(user_id):
             sort="created desc"
         )
 
-
-
-        # Something is wrong here, the subjects aare not fetched or not fetched correctly
         for work in logged_books.docs:
             work_key = work.get("key")
             if not work_key:
                 continue
 
-            # Query Open Library's Solr search to fetch work_key
-            solr_url = f"http://localhost:8080/works/{work_key}"
+            # Query Open Library's Solr search to fetch subjects for the work_key
+            solr_url = f"http://localhost:8080/search.json?q=/{work_key}&fields=subject"
             response = requests.get(solr_url)
 
-            if response.status_code != 200:
-                #solr_data = response.json()
-                #docs = solr_data.get("subjects", [])
-                
-                subject_keys.add('fantasy')
+            try:
+                # Ensure the response is not empty and is in JSON format
+                if response.status_code == 200 and response.content.strip():
+                    data = response.json()
+                    # Initialize subject_keys as an empty set
+                    subject_keys = set()
+                    # Extract subjects if available
+                    if 'docs' in data and isinstance(data['docs'], list):
+                        for doc in data['docs']:
+                            subjects = doc.get('subject', [])
+                            # Ensure subjects are hashable before adding to the set
+                            if isinstance(subjects, list):
+                                for subject in subjects:
+                                    if isinstance(subject, str):
+                                        subject_keys.add(subject.lower().replace(" ", "_"))
+                            elif isinstance(subjects, str):
+                                subject_keys.add(subjects.lower().replace(" ", "_"))
+            except json.JSONDecodeError:
+                print(f"JSON decoding failed for work_key '{work_key}' ")
 
-                #for doc in docs:
-                #    subject_keys.add(doc)  # Add unique author keys
-            else:
-                print(f"Failed to fetch data for {work_key}")
-
-    #return ['fantasy']
-    return ['null', 'science_fiction', 'fantasy', 'children']
-    #return list(subject_keys)  # Convert set back to list for final return
-
-    # create something like get_authors but with subjects 
-    # http://localhost:8080/subjects/fantasy
+    return subject_keys
 
     
 def new_recommendations(user_id):
@@ -160,8 +160,8 @@ def new_recommendations(user_id):
     Returns a list of work keys as strings that represent recommended works.
     """
     user_books = get_books_in_user_shelves(user_id)
-    author_list = get_authors_from_user_reading_history(user_id)      #['OL22098A']
-    subject_list = ['null', 'science_fiction', 'fantasy', 'children']
+    author_list = get_authors_from_user_reading_history(user_id)
+    subject_list = get_subjects(user_id)
 
 
     recommendations = set()
